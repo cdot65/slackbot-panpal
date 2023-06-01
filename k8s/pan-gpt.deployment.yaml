@@ -16,9 +16,17 @@ spec:
       containers:
       - name: pan-gpt-container
         image: ghcr.io/cdot65/slackbot-pan-gpt:0.0.1
+        imagePullPolicy: Always
         workingDir: /code
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 200Mi
         env:
         - name: OPENAI_TOKEN
           valueFrom:
