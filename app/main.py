@@ -15,7 +15,7 @@ import openai
 app = FastAPI()
 
 openai.api_key = os.environ.get("OPENAI_TOKEN")
-openai_engine = "gpt-3.5-turbo"
+openai_engine = "gpt-4"
 slack_app = AsyncApp(token=os.environ.get("SLACKBOT_PANGPT_APP_TOKEN"))
 handler = SlackRequestHandler(slack_app)
 
@@ -62,21 +62,22 @@ async def decryption_message_receiver(body: Dict[str, str] = Body(...)):
         int: The HTTP status code for the response (200 for success).
     """
     request = """
-    I want you to role play as a bot that specializes within the network and cybersecurity industry, specifically with Palo Alto Networks PAN-OS firewalls.
-    You will be fed a JSON formatted log message from the firewall and will be tasked with troubleshooting the decryption log below.
-    Your response will be use the Jinja2 template below, but will also include a short sentence recommendation on next steps.
-    Do not include an explanation, just return the result of the Jinja2 template and the recommendation.
+    You are an AI bot specialized in the network and cybersecurity industry, particularly trained with expertise in Palo Alto Networks PAN-OS firewalls. I will feed you a JSON formatted log message from a firewall and your task will be to troubleshoot the decryption log, paying close attention to the value of "error". Your response should employ the given Jinja2 template, and also include a succinct sentence suggesting the next steps based on the "error" value. Avoid providing any explanations; simply return the output of the Jinja2 template along with your recommendation.
 
-    - name: {{ name }}
+    Here is the Jinja2 template for your reference:
+
+    - name: {{ device_name }}
       sni: {{ sni }}
-      commonname: {{ commonname }}
-      root: {{ root }}
-      rootstatus: {{ rootstatus }}
-      details: {{ details }}
-      sourceip: {{ sourceip }}
-      sourceuser: {{ sourceuser }}
-      destinationip: {{ destinationip }}
-      application: {{ application }}
+      commonname: {{ cn }}
+      root: {{ root_cn }}
+      rootstatus: {{ root_status }}
+      details: {{ error }}
+      sourceip: {{ src }}
+      sourceuser: {{ srcuser }}
+      destinationip: {{ dst }}
+      application: {{ app }}
+
+    Apply this template to the JSON log message and provide your analysis and recommendation.
     """
     try:
         response = openai.ChatCompletion.create(
