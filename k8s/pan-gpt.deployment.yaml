@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pan-gpt-deployment
-  namespace: slackbots
+  namespace: slackbot
 spec:
   replicas: 1
   selector:
@@ -14,10 +14,28 @@ spec:
         app: pan-gpt
     spec:
       containers:
-      - name: pan-gpt
+      - name: pan-gpt-container
         image: ghcr.io/cdot65/slackbot-pan-gpt:0.0.1
         workingDir: /code
         ports:
         - containerPort: 80
+        env:
+        - name: OPENAI_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: OPENAI_TOKEN
+        - name: SLACKBOT_PANGPT_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: SLACKBOT_PANGPT_APP_TOKEN
+        - name: SLACKBOT_PANGPT_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: SLACKBOT_PANGPT_BOT_TOKEN
+        - name: SLACK_CHANNEL
+          value: 'C040K781939'
       imagePullSecrets:
       - name: dockerconfigjson-github-com
