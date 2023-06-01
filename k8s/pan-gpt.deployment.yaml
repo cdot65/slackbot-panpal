@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pan-gpt-deployment
+  namespace: slackbots
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pan-gpt
+  template:
+    metadata:
+      labels:
+        app: pan-gpt
+    spec:
+      containers:
+      - name: pan-gpt
+        image: ghcr.io/cdot65/slackbot-pan-gpt:0.0.1
+        workingDir: /code
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: dockerconfigjson-github-com
