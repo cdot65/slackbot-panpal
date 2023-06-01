@@ -32,12 +32,7 @@ PWD = os.getcwd()
 def build(context):
     """Build our Docker images."""
     context.run(
-        f"docker build -t {DOCKER_IMG}:{DOCKER_TAG} \
-            --build-arg OPENAI_TOKEN \
-            --build-arg SLACK_APP_TOKEN \
-            --build-arg SLACK_BOT_TOKEN \
-            --build-arg SLACK_CHANNEL \
-            .",
+        f"docker build -t {DOCKER_IMG}:{DOCKER_TAG} .",
     )
 
 
@@ -64,9 +59,6 @@ def local(context):
         f'docker run -it --rm \
             -p 8080:80 \
             -w /code \
-            {DOCKER_IMG}:{DOCKER_TAG} \
-            uvicorn app.main:app \
-            --host 0.0.0.0 \
-            --port 80',
+            {DOCKER_IMG}:{DOCKER_TAG}',
         pty=True,
     )
