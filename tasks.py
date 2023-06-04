@@ -14,9 +14,9 @@ from invoke import task
 # ---------------------------------------------------------------------------
 # DOCKER PARAMETERS
 # ---------------------------------------------------------------------------
-DOCKER_IMG = "ghcr.io/cdot65/pangpt"
+DOCKER_IMG = "ghcr.io/cdot65/slackbot-panpal"
 
-DOCKER_TAG = "0.1.0"
+DOCKER_TAG = "0.0.1"
 
 
 # ---------------------------------------------------------------------------
@@ -43,11 +43,12 @@ def build(context):
 def shell(context):
     """Get shell access to the container."""
     context.run(
-        f'docker run -it --rm \
+        f"docker run -it --rm \
             -w /code/app/ \
-            {DOCKER_IMG}:{DOCKER_TAG} /bin/sh',
+            {DOCKER_IMG}:{DOCKER_TAG} /bin/sh",
         pty=True,
     )
+
 
 # ---------------------------------------------------------------------------
 # FastAPI
@@ -56,9 +57,9 @@ def shell(context):
 def local(context):
     """Get access to the ipython REPL within our container."""
     context.run(
-        f'docker run -it --rm \
+        f"docker run -it --rm \
             -p 8080:80 \
             -w /code \
-            {DOCKER_IMG}:{DOCKER_TAG}',
+            {DOCKER_IMG}:{DOCKER_TAG}",
         pty=True,
     )

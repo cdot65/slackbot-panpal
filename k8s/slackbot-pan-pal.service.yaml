@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pan-gpt-service
+  name: panpal-service
   namespace: slackbot
 spec:
   selector:
-    app: pan-gpt
+    app: panpal
   ports:
   - protocol: TCP
     port: 8080

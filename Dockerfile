@@ -3,7 +3,7 @@ FROM python:3-alpine
 # ---------------------------------------------------------------------------
 # Metadata
 # ---------------------------------------------------------------------------
-LABEL name="ghcr.io/cdot65/slackbot-pan-gpt"
+LABEL name="ghcr.io/cdot65/slackbot-panpal"
 LABEL maintainer="cremsburg.dev@gmail.com"
 LABEL description="FastAPI server to redirect logs to ChatGPT for troubleshooting."
 LABEL license="Apache 2.0"

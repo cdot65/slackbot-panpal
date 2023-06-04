@@ -16,7 +16,7 @@ app = FastAPI()
 
 openai.api_key = os.environ.get("OPENAI_TOKEN")
 openai_engine = "gpt-4"
-slack_app = AsyncApp(token=os.environ.get("SLACKBOT_PANGPT_APP_TOKEN"))
+slack_app = AsyncApp(token=os.environ.get("SLACKBOT_PANPAL_APP_TOKEN"))
 handler = SlackRequestHandler(slack_app)
 
 
@@ -39,7 +39,7 @@ async def get_openapi_schema():
     openapi_schema = get_openapi(
         title="ChatGPT API",
         version="0.1.0",
-        description="API for interacting with OpenAI's GPT-3 chatbot",
+        description="Forwarding PAN-OS firewall logs to ChatGPT for troubleshooting.",
         routes=app.routes,
     )
     app.openapi_schema = openapi_schema
@@ -62,10 +62,8 @@ async def decryption_message_receiver(body: Dict[str, str] = Body(...)):
         int: The HTTP status code for the response (200 for success).
     """
     request = """
-    You are an AI bot specialized in the network and cybersecurity industry, particularly trained with expertise in Palo Alto Networks PAN-OS firewalls. I will feed you a JSON formatted log message from a firewall and your task will be to troubleshoot the decryption log, paying close attention to the value of "error". Your response should employ the given Jinja2 template, and also include a succinct sentence suggesting the next steps based on the "error" value. Avoid providing any explanations; simply return the output of the Jinja2 template along with your recommendation.
-
-    Here is the Jinja2 template for your reference:
-
+    You are an AI bot specialized in the network and cybersecurity industry, particularly trained with expertise in Palo Alto Networks PAN-OS firewalls. I will feed you a JSON formatted log message from a firewall and your task will be to troubleshoot the decryption log, paying close attention to the value of "error". Your response will be detailed troubleshooting information. Include affected users, affected devices, and any other information that would be helpful to the user. Your response will not reference yourself, will be without pronouns, and will be written in the third person as a Slack message. The response needs to be structured in Slack Block format as it will be sent to the user as a Slack message. Your response should employ the given Jinja2 template, and also include a succinct sentence suggesting the next steps based on the "error" value. Avoid providing any explanations; simply return the output of the Jinja2 template along with your recommendation.     Your task is to parse the JSON log message and use it as data to fill in this Jinja2 template and then provide your analysis and recommendations for remediation or additional troubleshooting. Here is the Jinja2 template for your reference:
+    ```jinja2
     - name: {{ device_name }}
       sni: {{ sni }}
       commonname: {{ cn }}
@@ -76,8 +74,7 @@ async def decryption_message_receiver(body: Dict[str, str] = Body(...)):
       sourceuser: {{ srcuser }}
       destinationip: {{ dst }}
       application: {{ app }}
-
-    Apply this template to the JSON log message and provide your analysis and recommendation.
+    ```
     """
     try:
         response = openai.ChatCompletion.create(
@@ -102,7 +99,7 @@ async def decryption_message_receiver(body: Dict[str, str] = Body(...)):
             channel=os.environ.get("SLACK_CHANNEL", ""),
             blocks=blocks,
             text="Here's the message content:",
-            token=os.environ.get("SLACKBOT_PANGPT_BOT_TOKEN", ""),
+            token=os.environ.get("SLACKBOT_PANPAL_BOT_TOKEN", ""),
         )
         return status.HTTP_200_OK
     except Exception as e:
@@ -154,7 +151,7 @@ async def globalprotect_message_receiver(body: Dict[str, str] = Body(...)):
         await slack_app.client.chat_postMessage(
             channel=os.environ.get("SLACK_CHANNEL", ""),
             blocks=blocks,
-            token=os.environ.get("SLACKBOT_PANGPT_BOT_TOKEN", ""),
+            token=os.environ.get("SLACKBOT_PANPAL_BOT_TOKEN", ""),
         )
         return status.HTTP_200_OK
     except Exception as e:

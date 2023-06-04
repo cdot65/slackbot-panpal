@@ -1,19 +1,19 @@
 display_information:
-  name: PanCyberScribe
-  description: Chat with Palo Alto Networks documentation
-  background_color: "#f04e23"
-  long_description: Navigating cybersecurity literature can be daunting, but it doesnt have to be. PanCyberScribe is here to simplify this task, serving as your trusted companion through the maze of technical jargon, protocols, and procedures related to Palo Alto Networks firewall products.
+  name: PAN Pal
+  description: PAN-OS with ChatGPT for troubleshooting
+  background_color: "#2b2928"
+  long_description: Receive error logs from PAN-OS firewalls and send them to ChatGPT for troubleshooting, results will be posted within the Slack channel soc-alerts. Bot can also be trigged with the slash command of /pangpt
 features:
   app_home:
     home_tab_enabled: true
-    messages_tab_enabled: true
+    messages_tab_enabled: false
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: PanCyberScribe
+    display_name: PAN Pal
     always_online: true
   slash_commands:
-  - command: /pandocs
-    description: Launch PanCyberScribe ChatBot
+  - command: /panpal
+    description: Launch PAN Pal ChatBot
     should_escape: false
 oauth_config:
   scopes:

@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pan-gpt-deployment
+  name: panpal-deployment
   namespace: slackbot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pan-gpt
+      app: panpal
   template:
     metadata:
       labels:
-        app: pan-gpt
+        app: panpal
     spec:
       containers:
-      - name: pan-gpt-container
-        image: ghcr.io/cdot65/slackbot-pan-gpt:0.0.1
+      - name: panpal-container
+        image: ghcr.io/cdot65/slackbot-panpal:0.0.1
         imagePullPolicy: Always
         workingDir: /code
         ports:
@@ -31,19 +31,19 @@ spec:
         - name: OPENAI_TOKEN
           valueFrom:
             secretKeyRef:
-              name: slack-secrets
+              name: panpal-secrets
               key: OPENAI_TOKEN
-        - name: SLACKBOT_PANGPT_APP_TOKEN
+        - name: SLACKBOT_PANPAL_APP_TOKEN
           valueFrom:
             secretKeyRef:
-              name: slack-secrets
-              key: SLACKBOT_PANGPT_APP_TOKEN
-        - name: SLACKBOT_PANGPT_BOT_TOKEN
+              name: panpal-secrets
+              key: SLACKBOT_PANPAL_APP_TOKEN
+        - name: SLACKBOT_PANPAL_BOT_TOKEN
           valueFrom:
             secretKeyRef:
-              name: slack-secrets
-              key: SLACKBOT_PANGPT_BOT_TOKEN
+              name: panpal-secrets
+              key: SLACKBOT_PANPAL_BOT_TOKEN
         - name: SLACK_CHANNEL
-          value: 'C040K781939'
+          value: 'C040K78VC5D'
       imagePullSecrets:
       - name: dockerconfigjson-github-com
